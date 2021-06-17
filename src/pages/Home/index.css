@@ -1,0 +1,15 @@
+.hero-cards-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 0 15%;
+  }
+  
+  .hero-card-container {
+    flex-basis: 20%;
+  }
+
+  .home-loading {
+    margin: 32px;
+    text-align: center;
+  }
