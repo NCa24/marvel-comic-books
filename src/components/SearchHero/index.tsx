@@ -21,7 +21,7 @@ export default function SearchHero( { onChange }: SearchHeroProps ): React.React
 			<div>
 				<img alt="marvel_logo" src={marvelLogo}/>
 			</div>
-			<input className="search-hero__input" placeholder="deadpool" onChange={debouncedChangeHandler}/>
+			<input aria-label="search-hero-input" className="search-hero__input" placeholder="deadpool" onChange={debouncedChangeHandler}/>
 		</div>
 	);
 }
