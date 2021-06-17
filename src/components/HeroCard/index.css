@@ -1,0 +1,36 @@
+.hero-card {
+    position: relative;
+    overflow: hidden;
+    padding-top: calc((100% - 10px) * 1.52);
+    /* standard poster aspect ratio */
+    border: 5px solid transparent;
+}
+
+.hero-card img {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: auto;
+}
+
+.hero-card:hover, .hero-card--active {
+    border: 5px solid red;
+}
+
+.hero-card__label {
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    bottom: -50px;
+    left: 0;
+    background: #fff;
+    padding: 16px 0;
+    transition: bottom 0.3s ease, visibility 0.3s ease;
+}
+
+.hero-card:hover .hero-card__label {
+    visibility: visible;
+    display: block;
+    bottom: 0;
+}
