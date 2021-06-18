@@ -31,8 +31,9 @@
     bottom: -50px;
     left: 0;
     background: #fff;
-    padding: 16px 0;
+    padding: 8px 0;
     transition: bottom 0.3s ease, visibility 0.3s ease;
+    text-align: center;
 }
 
 .hero-card:hover .hero-card__label {
