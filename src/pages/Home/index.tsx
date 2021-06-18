@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
+import cx from 'classnames';
 
 import './index.css';
 
@@ -12,11 +14,12 @@ import { getFromLocalStorage, setInLocalStorage } from '../../utils/localStorage
 const LOCAL_STORAGE_SELECTED_KEY = "selectedComicBooks";
 
 const Home = (): React.ReactElement => {
+  const [page, setPage] = useState(0);
   const [comicBooks, setComicBooks] = useState([] as ComicBook[]);
   const [filteredComicBooks, setFilteredComicBooks] = useState([] as ComicBook[]);
   const [selectedComicBooks, setSelectedComicBooks] = useState([] as string[]);
   const [valueToFilter, setValueToFilter] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const saveNewComicBook = useCallback((title: string) => {
     let updatedSelectedComicBooks;
@@ -46,24 +49,33 @@ const Home = (): React.ReactElement => {
   }, [valueToFilter, comicBooks])
 
   const fetchComicBooks = useCallback(async () => {
-    setLoading(true);
+    setIsLoading(true);
     try {
-      const res = await MarvelService.getComics(comicBooks.length);
+      const res = await MarvelService.getComics(page * 20);
       setComicBooks([...comicBooks, ...res.results])
-      setLoading(false);
+      setIsLoading(false);
     }
     catch (err) {
-      setLoading(false);
+      setIsLoading(false);
       return comicBooks;
     }
-  }, [comicBooks]);
+  }, [comicBooks, page]);
 
+  useEffect(() => {
+    if ((page + 1) * 20 <= comicBooks.length || page === 0) {
+      return;
+    }
+    fetchComicBooks();
+  }, [page])
 
   useEffect(() => {
     fetchComicBooks();
     setSelectedComicBooks(getFromLocalStorage(LOCAL_STORAGE_SELECTED_KEY) || [] as ComicBook[])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const isSearching = !!valueToFilter;
+  const sliceFrom = isSearching ? 0 : page * 20;
+  const sliceEnd = isSearching ? filteredComicBooks.length : (page + 1) * 20;
 
   return (
     <div>
@@ -71,18 +83,27 @@ const Home = (): React.ReactElement => {
         <SearchHero onChange={onSearchChange} />
       </section>
       <section className="home__display-area">
-        <div className="hero-cards-container">
-          {filteredComicBooks.map((item, index) => (
-            <div key={`${item.title} ${index}`} className="hero-card-container">
-              <HeroCard title={item.title} backgroundPath={`${item.images[0]?.path}.${item.images?.[0]?.extension}`} active={selectedComicBooks.includes(item.title + item.id)} onClick={() => saveNewComicBook(item.title + item.id)} />
-            </div>
-          ))}
-        </div>
-        <div className="home__pagination">
-          <button className="home__pagination__button">Previous Page</button>
-          <button className="home__pagination__button">Next Page</button>
-        </div>
-        {loading ? <div className="home-loading">loading more content</div> : null}
+        {isLoading ?
+          (<div className="hero-cards-container">
+            {new Array(20).fill(0).map((item, index) => (
+              <div key={`${item} ${index}`} className="hero-card-container">
+                <HeroCard title={""} backgroundPath={""} active={false} />
+              </div>
+            ))}
+          </div>) :
+          (<div className="hero-cards-container">
+            {filteredComicBooks.slice(sliceFrom, sliceEnd).map((item, index) => (
+              <div key={`${item.title} ${index}`} className="hero-card-container">
+                <HeroCard title={item.title} backgroundPath={`${item.images[0]?.path}.${item.images?.[0]?.extension}`} active={selectedComicBooks.includes(item.title + item.id)} onClick={() => saveNewComicBook(item.title + item.id)} />
+              </div>
+            ))}
+          </div>)}
+        {!isSearching ?
+          (<div className="home__pagination">
+            <button disabled={isLoading} className={cx("home__pagination__button", { 'home__pagination__button--disabled': page === 0 || isLoading })} onClick={() => setPage(page > 0 ? page - 1 : 0)}>Previous Page</button>
+            <button disabled={isLoading} className={cx("home__pagination__button", { 'home__pagination__button--disabled': isLoading })} onClick={() => setPage(page + 1)}>Next Page</button>
+          </div>) : null
+        }
       </section>
     </div>
   );

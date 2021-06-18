@@ -10,7 +10,6 @@
 
 .hero-cards-container {
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
   }
   
@@ -38,4 +37,9 @@
     font-weight: bold;
     padding: 16px;
     cursor: pointer;
+  }
+
+  .home__pagination__button--disabled {
+    cursor: not-allowed;
+    color: grey;
   }
