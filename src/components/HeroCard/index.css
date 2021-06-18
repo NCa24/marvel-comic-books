@@ -34,3 +34,16 @@
     display: block;
     bottom: 0;
 }
+
+.hero-card__favourite-container {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+    display: none;
+}
+
+.hero-card--active .hero-card__favourite-container,
+.hero-card:hover .hero-card__favourite-container {
+    display: block;
+}
