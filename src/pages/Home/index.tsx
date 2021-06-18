@@ -20,7 +20,7 @@ const Home = (): React.ReactElement => {
 
   const saveNewComicBook = useCallback((title: string) => {
     let updatedSelectedComicBooks;
-    if(selectedComicBooks.includes(title)) {
+    if (selectedComicBooks.includes(title)) {
       updatedSelectedComicBooks = selectedComicBooks.filter(item => item !== title)
     } else {
       updatedSelectedComicBooks = [...selectedComicBooks, title]
@@ -42,7 +42,7 @@ const Home = (): React.ReactElement => {
       const comicBookCharacters = comicBook.characters.items.map(item => item.name.toLowerCase())
       return !!comicBookCharacters.filter(char => char.includes(valueToFilter.toLowerCase())).length;
     });
-      setFilteredComicBooks(filteredComicBooks);
+    setFilteredComicBooks(filteredComicBooks);
   }, [valueToFilter, comicBooks])
 
   const fetchComicBooks = useCallback(async () => {
@@ -67,16 +67,23 @@ const Home = (): React.ReactElement => {
 
   return (
     <div>
-      <SearchHero onChange={onSearchChange} />
-      <div className="hero-cards-container">
-        {filteredComicBooks.map((item, index) => (
-          <div key={`${item.title} ${index}`} className="hero-card-container">
-            <HeroCard title={item.title} backgroundPath={`${item.images[0]?.path}.${item.images?.[0]?.extension}`} active={selectedComicBooks.includes(item.title + item.id)} onClick={() => saveNewComicBook(item.title + item.id)} />
-          </div>
-        ))}
-        <button onClick={fetchComicBooks}>fetch more</button>
-      </div>
-      {loading ? <div className="home-loading">loading more content</div> : null}
+      <section className="home__search-area">
+        <SearchHero onChange={onSearchChange} />
+      </section>
+      <section className="home__display-area">
+        <div className="hero-cards-container">
+          {filteredComicBooks.map((item, index) => (
+            <div key={`${item.title} ${index}`} className="hero-card-container">
+              <HeroCard title={item.title} backgroundPath={`${item.images[0]?.path}.${item.images?.[0]?.extension}`} active={selectedComicBooks.includes(item.title + item.id)} onClick={() => saveNewComicBook(item.title + item.id)} />
+            </div>
+          ))}
+        </div>
+        <div className="home__pagination">
+          <button className="home__pagination__button">Previous Page</button>
+          <button className="home__pagination__button">Next Page</button>
+        </div>
+        {loading ? <div className="home-loading">loading more content</div> : null}
+      </section>
     </div>
   );
 };
