@@ -38,8 +38,11 @@ const Home = (): React.ReactElement => {
       setFilteredComicBooks(comicBooks);
       return;
     }
-    const filteredComicBooks = comicBooks.filter(comicBook => comicBook.title.toLowerCase().includes(valueToFilter.toLowerCase()));
-    setFilteredComicBooks(filteredComicBooks);
+    const filteredComicBooks = comicBooks.filter(comicBook => {
+      const comicBookCharacters = comicBook.characters.items.map(item => item.name.toLowerCase())
+      return !!comicBookCharacters.filter(char => char.includes(valueToFilter.toLowerCase())).length;
+    });
+      setFilteredComicBooks(filteredComicBooks);
   }, [valueToFilter, comicBooks])
 
   const fetchComicBooks = useCallback(async () => {
