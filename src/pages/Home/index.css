@@ -12,9 +12,23 @@
     display: flex;
     flex-wrap: wrap;
   }
+
+  @media (max-width:1025px) {
+    .hero-card-container {
+      flex-basis: 33%;
+    }
+  }
+
+  @media (max-width:480px)  {
+    .hero-card-container {
+      flex-basis: 100%;
+    }
+  }
   
-  .hero-card-container {
-    flex-basis: 20%;
+  @media (min-width:1025px) {
+    .hero-card-container {
+      flex-basis: 20%;
+    }
   }
 
   .home-loading {
