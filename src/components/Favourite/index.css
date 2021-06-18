@@ -1,0 +1,10 @@
+.favourite {
+    height: 40px;
+    width: 40px;
+    background-repeat: no-repeat !important;
+    cursor: pointer;
+}
+
+.favourite:hover {
+    background: url("../../images/heart_hover.png") no-repeat center center !important;
+}
