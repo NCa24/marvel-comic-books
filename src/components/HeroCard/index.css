@@ -1,9 +1,9 @@
 .hero-card {
     position: relative;
     overflow: hidden;
-    padding-top: calc((100% - 10px) * 1.52);
+    padding-top: calc((100% - 16px) * 1.52);
     /* standard poster aspect ratio */
-    border: 5px solid transparent;
+    margin: 16px 8px;
 }
 
 .hero-card img {
@@ -14,8 +14,13 @@
     height: auto;
 }
 
-.hero-card:hover, .hero-card--active {
-    border: 5px solid red;
+.hero-card:not(.hero-card--active):hover {
+    box-shadow: 0px 5px 0px 0px red;
+}
+
+.hero-card--active {
+    box-shadow: 0px 0px 0px 5px red;
+
 }
 
 .hero-card__label {
